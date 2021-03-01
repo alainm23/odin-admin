@@ -1,0 +1,132 @@
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card class="dialog">
+    <nb-card-header>
+      Dettale pedido: {{ data.item.alias }}
+    </nb-card-header>
+
+    <div class="scroll">
+      <div id="img_mapa">
+        <div #map id="map"></div>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">N°</th>
+            <th scope="col">Actividad</th>
+            <th scope="col">Tiempo</th>
+            <th scope="col">Hora</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              -
+            </td>
+            <td>
+              Carga
+            </td>
+            <td>
+              {{ get_diferencia_timestamp (data.item.hora_inicio_carga, data.item.hora_fin_carga) }} min
+            </td>
+            <td>
+              {{ get_time_from_timestamp (data.item.hora_inicio_carga) }}
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              -
+            </td>
+            <td>
+              Inicio de ruta
+            </td>
+            <td>
+              {{ get_diferencia_timestamp (data.item.hora_fin_carga, data.item.hora_inicio_ruta) }} min
+            </td>
+            <td>
+              {{ get_time_from_timestamp (data.item.hora_fin_carga) }}
+            </td>
+          </tr>
+
+          <tr *ngFor="let cliente of data.item.informacion_clientes">
+            <td>{{ cliente.orden + 1 }}</td>
+            <td>{{ cliente.cliente_nombre }}</td>
+            <td>
+              <div>
+                <b>Recomendado:</b> {{ get_numero_redondeado (cliente.duracion / 60) }} min
+              </div>
+              <div>
+                <b>Final:</b> {{ get_diferencia (cliente, data.item) }} min
+              </div>
+            </td>
+            <td>{{ get_time_from_timestamp (cliente.hora_llegada) }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              -
+            </td>
+            <td>
+              Fin de ruta
+            </td>
+            <td>
+              {{ get_diferencia_timestamp (data.item.informacion_clientes [data.item.informacion_clientes.length - 1].hora_fin_descarga, data.item.hora_fin_ruta) }} min
+            </td>
+            <td>
+              {{ get_time_from_timestamp (data.item.hora_fin_ruta) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-3">
+          <button nbButton fullWidth (click)="ref.close ()">Cerrar</button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<nb-card [nbSpinner]="esta_cargando" nbSpinnerStatus="primary">
+  <nb-card-header>
+    Historial de Pedidos
+    &nbsp;
+    &nbsp;
+    <nb-select (selectedChange)="get_pedidos ()" [(ngModel)]="nodo_tipo" size="small" placeholder="Seleccione una opcion">
+      <nb-option value="Picking">Picking</nb-option>
+      <nb-option value="Cardex">Cardex</nb-option>
+    </nb-select>
+  </nb-card-header>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Conductor</th>
+        <th scope="col">Vehiculo</th>
+        <th scope="col">Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>{{ item.alias }}</td>
+        <td>{{ item.fecha }}</td>
+        <td>{{ item.conductor_nombre }}</td>
+        <td>{{ item.vehiculo_alias }}</td>
+        <td>
+          <button nbButton size="tiny" (click)="ver (item, dialog)">
+            Detalles
+          </button>
+          &nbsp;
+          <button status="danger" nbButton size="tiny" (click)="eliminar (item)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</nb-card>

@@ -1,0 +1,236 @@
+<ng-template #reportes let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>
+      <div class="row">
+        <div class="col-4">
+          Reportes
+        </div>
+
+        <div class="col-4">
+          <nb-select [(ngModel)]="anio_seleccionado" fullWidth placeholder="Año" (ngModelChange)="actualizar_actividades ()">
+            <nb-option value="">Todo</nb-option>
+            <nb-option value="2019">2019</nb-option>
+            <nb-option value="2020">2020</nb-option>
+          </nb-select>
+        </div>
+
+        <div class="col-4">
+          <nb-select [disabled]="anio_seleccionado === ''" [(ngModel)]="mes_seleccionado" fullWidth placeholder="Mes" (ngModelChange)="actualizar_actividades ()">
+            <nb-option value="">Todo</nb-option>
+            <nb-option value="01">Enero</nb-option>
+            <nb-option value="02">Febrero</nb-option>
+            <nb-option value="03">Marzo</nb-option>
+            <nb-option value="04">Abril</nb-option>
+            <nb-option value="05">Mayo</nb-option>
+            <nb-option value="06">Junio</nb-option>
+            <nb-option value="07">Julio</nb-option>
+            <nb-option value="08">Agosto</nb-option>
+            <nb-option value="09">Septiembre</nb-option>
+            <nb-option value="10">Octubre</nb-option>
+            <nb-option value="11">Noviembre</nb-option>
+            <nb-option value="12">Dociembre</nb-option>
+          </nb-select>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col" class="cabezal">Nombre</th>
+            <th scope="col" class="cabezal">Fecha creada</th>
+            <th scope="col" class="cabezal">Cantidad</th>
+            <th scope="col" class="cabezal">Monto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="contenido_table" *ngFor="let item of items">
+            <th scrope="row">
+              {{ item.nombre_cliente }}
+            </th>
+
+            <th scrope="row">
+              {{ item.fecha_registro }}
+            </th>
+
+            <th scrope="row">
+              {{ get_total (item, 'cantidad') }}
+            </th>
+
+            <th scrope="row">
+              {{ get_total (item, 'monto') }}
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-6">
+          <button nbButton fullWidth>Ok</button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<ng-template #productos let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group has-search">
+            <span class="fa fa-search form-control-feedback"></span>
+            <input type="text" class="form-control" placeholder="Search" [(ngModel)]="search_term" (ngModelChange)="search_changed ()">
+          </div>
+
+          <ul id="myUL" style="width: 100%;" *ngIf="resultados.length > 0">
+            <li *ngFor="let item of resultados" (click)="add_item (item)">
+              <a>{{ item.nombre }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col" class="cabezal">Nombre</th>
+            <th scope="col" class="cabezal">Presentacion</th>
+            <th scope="col" class="cabezal">Precio sugerido</th>
+            <th scope="col" class="cabezal"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="contenido_table" *ngFor="let item of productos_precio">
+            <th scope="row">
+              {{ item.ref.nombre }}
+            </th>
+
+            <th scope="row">
+              {{ item.ref.presentacion }}
+            </th>
+
+            <th scope="row">
+              <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.data.precio }}</span>
+              <input *ngIf="item.editar === true" type="number" [(ngModel)]="item.data.precio">
+            </th>
+
+            <th>
+              <button style="margin-left: 6px;" *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="edit_precio (item)">
+                <i class="fas fa-pencil-alt icono"></i>
+              </button>
+
+              <button style="margin-left: 6px;" *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="eliminar_precio (item)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+
+              <button *ngIf="item.editar === true" [disabled]="item.data.precio === ''" (click)="save_precio (item)">
+                <i class="fas fa-save"></i>
+              </button>
+
+              <button style="margin-left: 6px;"  *ngIf="item.editar === true" (click)="cancel_precio (item)">
+                <i class="fas fa-times-circle"></i>
+              </button>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-6">
+          <button nbButton fullWidth>Ok</button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<div class="container-fluid">
+  <div style="margin-bottom: 1rem; margin-top: 1rem;" class="row">
+    <div class="col-6">
+
+    </div>
+    <div class="col-3">
+      <button style="width: 100%;" (click)="open_reportes (reportes)">Reportes</button>
+    </div>
+    <div class="col-3">
+      <button style="width: 100%;" (click)="registrar ()">Registrar</button>
+    </div>
+  </div>
+  <form [formGroup]="form">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col" class="cabezal">Nombre</th>
+          <th scope="col" class="cabezal">Tipo</th>
+          <th scope="col" class="cabezal">Direccion</th>
+          <th scope="col" class="cabezal">Referencia</th>
+          <th scope="col" class="cabezal">Telefono</th>
+          <th scope="col" class="cabezal">Correo</th>
+          <th scope="col" class="cabezal">Ubicacion</th>
+          <th scope="col" class="cabezal">Persona contacto</th>
+          <th scope="col" class="cabezal"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="contenido_table" *ngFor="let item of items">
+          <th scope="row" class="">
+            {{ item.nombre_cliente }}
+          </th>
+
+          <th scope="row" class="">
+            {{ item.tipo }}
+          </th>
+
+          <th scope="row" class="">
+            {{ item.direccion }}
+          </th>
+
+          <th scope="row" class="">
+            {{ item.referencia }}
+          </th>
+
+          <th scope="row" class="">
+            {{ item.telefono }}
+          </th>
+
+          <th scope="row" class="">
+            {{ item.correo }}
+          </th>
+
+          <th scope="row" class="">
+            {{ item.latitud }} {{ item.longitud }}
+          </th>
+
+          <th scope="row" class="">
+            {{ item.persona_contacto }}
+          </th>
+          <th style="display: inline-flex;">
+            <button *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="ver_productos (item, productos)">
+              <i class="fas fa-list"></i>
+            </button>
+
+            <button style="margin-left: 6px;" *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="edit (item)">
+              <i class="fas fa-pencil-alt icono"></i>
+            </button>
+
+            <button style="margin-left: 6px;" *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="eliminar (item)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+
+            <button *ngIf="item.editar === true" [disabled]="item.disabled" (click)="save (item)">
+              <i class="fas fa-save"></i>
+            </button>
+
+            <button style="margin-left: 6px;"  *ngIf="item.editar === true" (click)="cancel (item)">
+              <i class="fas fa-times-circle"></i>
+            </button>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>

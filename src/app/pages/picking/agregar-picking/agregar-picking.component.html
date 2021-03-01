@@ -1,0 +1,258 @@
+<ng-template #agregar_productos let-data let-ref="dialogRef">
+  <nb-card [nbSpinner]="cargando_productos" nbSpinnerStatus="primary">
+    <nb-card-header>
+      <div class="row">
+        <div class="col-3">
+          Cliente
+        </div>
+
+        <div class="col-9">
+          <select class="select-css" [(ngModel)]="cliente_seleccionado" fullWidth (ngModelChange)="actualizar_cliente_productos ()">
+            <option *ngFor="let item of clientes" [ngValue]="item">
+              {{ item.nombre_cliente }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col" class="cabezal">Nombre</th>
+            <th scope="col" class="cabezal">Presentacion</th>
+            <th scope="col" class="cabezal">Precio base</th>
+            <th scope="col" class="cabezal">Precio sugerido</th>
+            <th scope="col" class="cabezal">Stock</th>
+            <th scope="col" class="cabezal">Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="contenido_table" *ngFor="let item of productos_para_seleccionar">
+            <th scope="row">
+              {{ item.ref.nombre }}
+            </th>
+
+            <th scope="row">
+              {{ item.ref.presentacion }}
+            </th>
+
+            <th scope="row">
+              {{ item.ref.precio_base }}
+            </th>
+
+            <th scope="row">
+              {{ item.data.precio }}
+            </th>
+
+            <th scope="row">
+              {{ item.ref.stock }}
+            </th>
+
+            <th scope="row">
+              <input type="text" [(ngModel)]="item.cantidad">
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-6">
+          <button nbButton fullWidth (click)="registrar (productos_para_seleccionar, ref)">Registrar</button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<!-- <nb-card>
+  <nb-card-body>
+    <form [formGroup]="form">
+      <div class="form-group">
+        <label for="vehiculo" class="label">Vehiculo:</label>
+        <select class="select-css" fullWidth formControlName="vehiculo" id="vehiculo" [compareWith]="compareWith" (ngModelChange)="vehiculoChanged ($event)">
+          <option *ngFor="let item of vehiculos" [ngValue]="item">
+            {{ item.nro_placa }}
+          </option>
+        </select>
+      </div>
+
+      <ul *ngIf="form.value.vehiculo !== ''">
+        <li>Nro. Placa: {{ form.value.vehiculo.nro_placa }}</li>
+        <li>Modelo: {{ form.value.vehiculo.modelo }}</li>
+        <li>Carga maxima: {{ form.value.vehiculo.carga_maxima }}</li>
+        <li>Observaciones: {{ form.value.vehiculo.observaciones }}</li>
+      </ul>
+
+      <div class="form-group">
+        <label for="chofer" class="label">Chofer:</label>
+        <select class="select-css" fullWidth formControlName="chofer" id="chofer" [compareWith]="compareWith">
+          <option *ngFor="let item of choferes" [ngValue]="item">
+            {{ item.nombre_completo }}
+          </option>
+        </select>
+      </div>
+
+      <ul *ngIf="form.value.chofer !== ''">
+        <li>Nombre completo: {{ form.value.chofer.nombre_completo }}</li>
+        <li>DNI: {{ form.value.chofer.dni }}</li>
+        <li>Celular: {{ form.value.chofer.celular }}</li>
+        <li>Observaciones: {{ form.value.chofer.observaciones }}</li>
+      </ul>
+    </form>
+  </nb-card-body>
+</nb-card> -->
+
+<nb-card>
+  <nb-card-body>
+    <nb-stepper orientation="horizontal">
+      <nb-step [label]="labelOne">
+        <ng-template #labelOne>Productos</ng-template>
+          <form [formGroup]="form">
+            <nb-card>
+              <nb-card-header>Registrar Picking</nb-card-header>
+              <nb-card-body>
+                <!-- <div class="form-group">
+                  <label for="id" class="label">Nro. Picking:</label>
+                  <input type="text" formControlName="id" id="id" nbInput fullWidth placeholder="">
+                </div> -->
+
+                <div class="form-group" [nbSpinner]="cargando_vehiculos" nbSpinnerStatus="primary">
+                  <label for="vehiculo_id" class="label">Vehiculo:</label>
+                  <select class="select-css" fullWidth formControlName="vehiculo_id" id="vehiculo_id" [compareWith]="compareWith" (ngModelChange)="vehiculoChanged ($event)">
+                    <option *ngFor="let item of vehiculos" [ngValue]="item.id">
+                      {{ item.alias }}
+                    </option>
+                  </select>
+                </div>
+
+                <ul *ngIf="vehiculo_seleccionado !== null">
+                  <li>Nro. Placa: {{ vehiculo_seleccionado?.nro_placa }}</li>
+                  <li>Modelo: {{ vehiculo_seleccionado?.modelo }}</li>
+                  <li>Carga maxima: {{ vehiculo_seleccionado?.peso_carga_bruta }}</li>
+                  <li>Observaciones: {{ vehiculo_seleccionado?.observaciones }}</li>
+                </ul>
+
+                <div class="form-group" [nbSpinner]="cargando_choferes" nbSpinnerStatus="primary">
+                  <label for="conductor_id" class="label">Conductor:</label>
+                  <select class="select-css" fullWidth formControlName="conductor_id" id="conductor_id" [compareWith]="compareWith" (ngModelChange)="conductorChanged ($event)">
+                    <option *ngFor="let item of choferes" [ngValue]="item.id">
+                      {{ item.nombre_completo }}
+                    </option>
+                  </select>
+                </div>
+
+                <ul *ngIf="conductor_seleccionado !== null">
+                  <li>Nombre completo: {{ conductor_seleccionado?.nombre_completo }}</li>
+                  <li>DNI: {{ conductor_seleccionado?.dni }}</li>
+                  <li>Celular: {{ conductor_seleccionado?.celular }}</li>
+                  <li>Observaciones: {{ conductor_seleccionado?.observaciones }}</li>
+                </ul>
+              </nb-card-body>
+            </nb-card>
+          </form>
+
+          <nb-card>
+            <nb-card-header>
+              <div class="row">
+                <div class="col-9">
+                  Productos
+                </div>
+
+                <div class="col-3">
+                  <button nbButton fullWidth (click)="agregar_producto (agregar_productos)">Agregar</button>
+                </div>
+              </div>
+            </nb-card-header>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Producto</th>
+                  <th scope="col">Presentacion</th>
+                  <th scope="col">Cantidad</th>
+                  <th scope="col">Precio</th>
+                  <th scope="col">Peso</th>
+                  <th scope="col">Cliente</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of items">
+                  <th scope="row">{{ item.id }}</th>
+                  <td scope="row">{{ item.nombre }}</td>
+                  <td scope="row">{{ item.presentacion }}</td>
+                  <td scope="row"><input type="number" [(ngModel)]="item.cantidad" style="width: 54px;"></td>
+                  <td scope="row">
+                    <input style="width: 54px;" type="number" [(ngModel)]="item.precio">
+                  </td>
+                  <td scope="row">{{ item.peso }}</td>
+                  <td scope="row">{{ item.cliente_nombre }}</td>
+                  <td>
+                    <button (click)="eliminar_producto (item)">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </nb-card>
+        <button nbButton nbStepperNext (click)="obtener_clientes ()" [disabled]="!form.valid">Siguiente</button>
+      </nb-step>
+
+      <nb-step [label]="labelTwo">
+        <ng-template #labelTwo>Ruta</ng-template>
+
+        <nb-card [nbSpinner]="cargando" nbSpinnerStatus="primary">
+          <nb-card-header>
+            <div class="row align-items-center">
+              <div class="col-8">
+                Ruta
+              </div>
+
+              <div class="col-4" style="text-align: end;">
+                <nb-toggle labelPosition="start" [(ngModel)]="optimizeWaypoints" (ngModelChange)="crear_ruta ()">Optimizada</nb-toggle>
+              </div>
+            </div>
+          </nb-card-header>
+
+          <nb-card-body>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Orden</th>
+                  <th scope="col">Cliente</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of clientes_picking">
+                  <th scope="row">{{ item?.orden + 1 }}</th>
+                  <td>{{ item.cliente.nombre_cliente }}</td>
+                  <td>
+                    <button [disabled]="item.orden <= 0" (click)="cambiar_orden (item, -1)">
+                      <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <button [disabled]="item.orden >= clientes_picking.length - 1" (click)="cambiar_orden (item, +1)">
+                      <i class="fas fa-arrow-down"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </nb-card-body>
+
+          <nb-card-body [nbSpinner]="carga_ruta" nbSpinnerStatus="primary">
+            <div class="map-class">
+              <div #map id="map"></div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <button nbButton nbStepperPrevious>Atras</button>
+        <button nbButton nbStepperNext style="margin-left: 1rem;" (click)="submit ()">Siguiente</button>
+      </nb-step>
+    </nb-stepper>
+  </nb-card-body>
+</nb-card>

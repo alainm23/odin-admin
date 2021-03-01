@@ -1,0 +1,108 @@
+<div id="menu">
+  <div id="imgBmx">
+    <img src="assets/img/logo.png" width="100%;">
+  </div>
+  <div style="display: flex;" class="my-5">
+    <div class="div_btn_iguales">
+      <button [ngStyle]="{'background-color': view === 'alicorp' ? '#3182b1' : '#0D5B88' }" class="btn_collapse py-2" id="btn_solicitando1" (click)="go_view ('alicorp')">Alicorp</button>
+      <div class="linea_blanco" id="linea1">
+        <i class="fas fa-caret-down"></i>
+      </div>
+    </div>
+    <div class="div_btn_iguales">
+      <button [ngStyle]="{'background-color': view === 'cardex' ? '#3182b1' : '#0D5B88' }" class="btn_collapse py-2" id="btn_solicitando2" (click)="go_view ('cardex')">Cardex</button>
+      <div class="linea_blanco" id="linea2">
+        <i class="fas fa-caret-down"></i>
+      </div>
+    </div>
+    <div class="div_btn_iguales">
+      <button [ngStyle]="{'background-color': view === 'vendedor' ? '#3182b1' : '#0D5B88' }" class="btn_collapse py-2" id="btn_solicitando3" (click)="go_view ('vendedor')">Vendedor</button>
+      <div class="linea_blanco" id="linea3">
+        <i class="fas fa-caret-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-5 px-4 text-left" *ngIf="view === 'alicorp'">
+    <p class="mb-0"><a class="color_blanco font-weight-bold" (click)="go_page ('pages/cardex/dashboard')" style="font-family: AvenirHeavy;">Panel de control</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+
+    <p class="mb-0"><a class="font_family_delgado color_blanco" (click)="go_page ('pages/alicorp/agregar-picking')">Registrar pickig</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+
+    <p class="mb-0"><a class="font_family_delgado color_blanco" (click)="go_page ('pages/cardex/historial')">Ver Historial</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+    <!-- <div class="my-2 linea_blanco_delgado"></div>
+    <p class="mb-5"><a class="font_family_delgado color_blanco">Rutas</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+    <a class="font_family_delgado color_blanco">Leyenda</a>
+    <div class="my-2 linea_blanco_delgado"></div> -->
+  </div>
+
+  <div class="alicor my-5 px-4 text-left" *ngIf="view === 'cardex'">
+    <p class="mb-0"><a class="color_blanco font-weight-bold" (click)="go_page ('pages/cardex/dashboard')" style="font-family: AvenirHeavy;">Panel de control</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+
+    <p class="mb-0"><a class="font_family_delgado color_blanco" (click)="go_page ('pages/cardex/agregar-cardex')">Registrar nuevo cardex</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+
+    <p class="mb-0"><a class="font_family_delgado color_blanco" (click)="go_page ('pages/cardex/historial')">Ver Historial</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+
+    <div>
+    <p class="mb-0 mostrar"><a class="font_family_delgado color_blanco">Administrar y visualizar</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+        <div class="ml-4">
+          <p class="mb-0"><a class="font_family_delgado color_blanco" (click)="go_page ('pages/vehiculos/listar-vehiculos')">Flota (Vehículos)</a></p>
+            <div class="my-2 linea_blanco_delgado"></div>
+            <p class="mb-0"><a class="font_family_delgado color_blanco" (click)="go_page ('pages/productos/overview')">Productos</a></p>
+            <div class="my-2 linea_blanco_delgado"></div>
+            <p class="mb-0"><a class="font_family_delgado color_blanco" (click)="go_page ('pages/productos/administrar-categorias')">Categorias</a></p>
+            <div class="my-2 linea_blanco_delgado"></div>
+            <p class="mb-0"><a class="font_family_delgado color_blanco" (click)="go_page ('pages/productos/administrar-marcas')">Marcas</a></p>
+            <div class="my-2 linea_blanco_delgado"></div>
+            <p class="mb-0"><a class="font_family_delgado color_blanco" (click)="go_page ('pages/terminales-clientes/listar-terminales-clientes')">Clientes</a></p>
+            <!-- <div class="my-2 linea_blanco_delgado"></div>
+            <p class="mb-0"><a class="font_family_delgado color_blanco">Eventos</a></p> -->
+            <div class="my-2 linea_blanco_delgado"></div>
+            <p class="mb-0"><a class="font_family_delgado color_blanco" (click)="go_page ('pages/usuarios/listar-usuarios')">Usuarios</a></p>
+        </div>
+    </div>
+    <!-- <div class="my-2 linea_blanco_delgado"></div>
+    <p class="mb-5"><a class="font_family_delgado color_blanco">Rutas</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+    <a class="font_family_delgado color_blanco">Leyenda</a>
+    <div class="my-2 linea_blanco_delgado"></div> -->
+  </div>
+
+  <div class="alicor my-5 px-4 text-left" *ngIf="view === 'vendedor'">
+    <p class="mb-0"><a class="color_blanco font-weight-bold" style="font-family: AvenirHeavy;">Panel de control</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+
+    <p class="mb-0"><a class="font_family_delgado color_blanco">Registrar carrito vendedor</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+
+    <p class="mb-0"><a class="font_family_delgado color_blanco">Ver Historial</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+    <div>
+    <p class="mb-0 mostrar"><a class="font_family_delgado color_blanco">Administrar y visualizar</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+        <div class="ml-4">
+          <p class="mb-0"><a class="font_family_delgado color_blanco">Flota (Vehículos)</a></p>
+            <div class="my-2 linea_blanco_delgado"></div>
+            <p class="mb-0"><a class="font_family_delgado color_blanco">Productos</a></p>
+            <div class="my-2 linea_blanco_delgado"></div>
+            <p class="mb-0"><a class="font_family_delgado color_blanco">Clientes</a></p>
+            <!-- <div class="my-2 linea_blanco_delgado"></div>
+            <p class="mb-0"><a class="font_family_delgado color_blanco">Eventos</a></p> -->
+            <div class="my-2 linea_blanco_delgado"></div>
+            <p class="mb-0"><a class="font_family_delgado color_blanco">Usuarios</a></p>
+        </div>
+    </div>
+    <!-- <div class="my-2 linea_blanco_delgado"></div>
+    <p class="mb-5"><a class="font_family_delgado color_blanco">Rutas</a></p>
+    <div class="my-2 linea_blanco_delgado"></div>
+    <a class="font_family_delgado color_blanco">Leyenda</a>
+    <div class="my-2 linea_blanco_delgado"></div> -->
+  </div>
+</div>

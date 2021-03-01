@@ -1,0 +1,173 @@
+<div id="mapa" class="">
+  <div id="img_mapa">
+    <div #map id="map"></div>
+  </div>
+
+  <div style="display: flex; width: 100%;">
+    <div style="width: 240px;">
+      <div style="display: flex;" class="horario"></div>
+
+      <div style="display: flex; margin-bottom: 4px;" class="horario" id="azul" *ngFor="let item of carros">
+       <img src="assets/img/Grupo45.png">
+       <p>{{ item.alias }}</p>
+      </div>
+    </div>
+
+    <div style="width: 100%; overflow-y: hidden;overflow-x: auto;height: auto;white-space: nowrap;">
+      <div class="horario">
+        <div class="liost_iguales">
+          <span>8:00</span>
+          <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>08:30</span>
+          <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>09:00</span>
+          <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>09:30</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>10:00</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>10:30</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>11:00</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>11:30</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>12:00</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>12:30</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>13:00</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>13:30</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>14:00</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>14:30</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>15:00</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>15:30</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>16:00</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>16:30</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>17:00</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>17:30</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>18:00</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>18:30</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>19:00</span>
+            <span class="ml-2 mr-3">...</span>
+        </div>
+        <div class="liost_iguales">
+          <span>19:30</span>
+        </div>
+      </div>
+      <div *ngFor="let carro of carros"  class="horario" style="margin-bottom: 4px; width: auto;">
+        <div style="background-color: #D6D6D6; min-width: 2880px; position: relative;">
+          <div *ngFor="let pedido of carro.pedidos">
+            <div *ngIf="pedido.hora_inicio_carga !== null" [id]="'inicio_carga_' + pedido.id">
+              <img [tooltip]="'Inicio de carga: ' + timestamp_to_date (pedido.hora_inicio_carga)" placement="top"  style="position: relative;" src="assets/img/inicio_evento.svg">
+            </div>
+
+            <div *ngIf="pedido.hora_fin_carga !== null" [id]="'fin_carga_' + pedido.id">
+              <img [tooltip]="'Fin de carga: ' + timestamp_to_date (pedido.hora_fin_carga)" placement="top"  style="position: relative; left: -3px;" src="assets/img/fin_evento.svg">
+            </div>
+
+            <div *ngIf="pedido.hora_inicio_ruta !== null" [id]="'hora_inicio_ruta_' + pedido.id">
+              <img [tooltip]="'Inicio de ruta: ' + timestamp_to_date (pedido.hora_inicio_ruta)" placement="top"  style="margin-top: 16px;" src="assets/img/inicio_ruta.svg">
+            </div>
+
+            <div *ngIf="pedido.hora_llegada_almacen !== null" [id]="'hora_llegada_almacen_' + pedido.id">
+              <img [tooltip]="'LLegada a almacen: ' + timestamp_to_date (pedido.hora_llegada_almacen)" placement="top"  style="margin-top: 10px; position: absolute; left: -12px;" src="assets/img/5a937083c9ce7f4ed3b4a08c1363ff06.png">
+            </div>
+
+            <div *ngIf="pedido.hora_fin_ruta !== null" [id]="'hora_fin_ruta_' + pedido.id">
+              <img [tooltip]="'Fin de ruta: ' + timestamp_to_date (pedido.hora_fin_ruta)" placement="top"  style="margin-top: 12px; position: absolute; left: -6px;" src="assets/img/fin_ruta.svg">
+            </div>
+            
+            <div style="position: absolute;" *ngFor="let evento of pedido.eventos">
+              <div *ngIf="evento.hora_inicio !== null" [id]="'evento_inicio_' + evento.id">
+                <img [tooltip]="evento.nombre + ', hora de inicio: ' + evento.hora_inicio" placement="top" src="assets/img/inicio_evento.svg">
+              </div>
+
+              <div *ngIf="evento.hora_fin !== null" [id]="'evento_fin_' + evento.id">
+                <img [tooltip]="evento.nombre + ', hora de fin: ' + evento.hora_fin" placement="top" src="assets/img/fin_evento.svg">
+              </div>
+            </div>
+
+            <div style="position: absolute;" *ngFor="let cliente of pedido.informacion_clientes">
+              <ng-template #HtmlContent>
+                <p style="color: #ffffff; text-align: left;"><strong>Cliente: </strong>{{ cliente.cliente_nombre }}</p>
+                <p style="color: #ffffff; text-align: left;"><strong>Direccion: </strong>{{ cliente.cliente_direccion }}</p>
+                <p style="color: #ffffff; text-align: left;"><strong>Hora de llegada: </strong>{{ timestamp_to_date (cliente.hora_llegada) }}</p>
+              </ng-template>
+
+              <div *ngIf="cliente.hora_llegada !== null && cliente.hora_llegada !== ''" [id]="'hora_llegada_' + cliente.id">
+                <img [tooltip]="HtmlContent" content-type="template" style="margin-top: 16px; position: relative; left: -7px;" src="assets/img/llegada_cliente.svg">
+              </div>
+
+              <div *ngIf="cliente.hora_inicio_descarga !== null && cliente.hora_inicio_descarga !== ''" [id]="'hora_inicio_descarga_' + cliente.id">
+                <img [tooltip]="'Hora de descarga: ' + timestamp_to_date (cliente.hora_inicio_descarga)" style="margin-top: 12px; position: relative; left: -6px;" src="assets/img/descarga.svg">
+              </div>
+
+              <div *ngIf="cliente.hora_fin_descarga !== null && cliente.hora_fin_descarga !== ''" [id]="'hora_fin_descarga_' + cliente.id">
+                <img [tooltip]="'Hora fin de descarga: ' + timestamp_to_date (cliente.hora_fin_descarga)" style="margin-top: 16px; position: relative; left: -6px;" [src]="get_icon (cliente.tipo_descarga)">
+              </div>
+            </div>
+          </div>
+
+          {{ draw (carro) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+[debug] [2020-04-13T17:22:35.889Z] ----------------------------------------------------------------------
+[debug] [2020-04-13T17:22:35.893Z] Command:       /usr/bin/node /usr/bin/firebase deploy
+[debug] [2020-04-13T17:22:35.893Z] CLI Version:   7.14.0
+[debug] [2020-04-13T17:22:35.893Z] Platform:      linux
+[debug] [2020-04-13T17:22:35.893Z] Node Version:  v10.19.0
+[debug] [2020-04-13T17:22:35.893Z] Time:          Mon Apr 13 2020 12:22:35 GMT-0500 (GMT-05:00)
+[debug] [2020-04-13T17:22:35.893Z] ----------------------------------------------------------------------
+[debug] [2020-04-13T17:22:35.893Z] 
+[debug] [2020-04-13T17:22:35.901Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-13T17:22:35.901Z] > authorizing via signed-in user
+[debug] [2020-04-13T17:22:35.901Z] [iam] checking project alicorp-59656 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-04-13T17:22:35.903Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/alicorp-59656:testIamPermissions  
+
+[debug] [2020-04-13T17:22:36.449Z] [iam] error while checking permissions, command may fail: FirebaseError: Server Error. read ECONNRESET
+[debug] [2020-04-13T17:22:36.453Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/alicorp-59656  
+ 
+[debug] [2020-04-13T17:22:37.020Z] Server Error. read ECONNRESET
+[debug] [2020-04-13T17:22:37.703Z] FirebaseError: Server Error. read ECONNRESET
+    at Request._callback (/usr/lib/node_modules/firebase-tools/lib/api.js:30:31)
+    at self.callback (/usr/lib/node_modules/firebase-tools/node_modules/request/request.js:185:22)
+    at Request.emit (events.js:198:13)
+    at Request.EventEmitter.emit (domain.js:448:20)
+    at Request.onRequestError (/usr/lib/node_modules/firebase-tools/node_modules/request/request.js:877:8)
+    at ClientRequest.emit (events.js:203:15)
+    at ClientRequest.EventEmitter.emit (domain.js:448:20)
+    at TLSSocket.socketErrorListener (_http_client.js:401:9)
+    at TLSSocket.emit (events.js:198:13)
+    at TLSSocket.EventEmitter.emit (domain.js:448:20)
+    at emitErrorNT (internal/streams/destroy.js:91:8)
+    at emitErrorAndCloseNT (internal/streams/destroy.js:59:3)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+[error] 
+[error] Error: Failed to get Firebase project alicorp-59656. Please make sure the project exists and your account has permission to access it.

@@ -1,0 +1,357 @@
+
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>Editar</nb-card-header>
+    <nb-card-body>
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="marca" class="label">Marca:</label>
+              <input type="text" formControlName="marca" id="marca" nbInput fullWidth placeholder="marca">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="modelo" class="label">Modelo:</label>
+              <input type="text" formControlName="modelo" id="modelo" nbInput fullWidth placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="peso_carga_bruta" class="label">Carga Máxima (Kg):</label>
+              <input type="text" formControlName="peso_carga_bruta" id="peso_carga_bruta" nbInput fullWidth placeholder="">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="volumen_carga_bruta" class="label">Volumen Máximo:</label>
+              <input type="text" formControlName="volumen_carga_bruta" id="volumen_carga_bruta" nbInput fullWidth placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="estado" class="label">Estado:</label>
+              <select class="select-css" fullWidth formControlName="estado" id="estado" [compareWith]="compareWith">
+                <option value=0>No disponible</option>
+                <option value=1>Mantenimiento</option>
+                <option value=2>Disponible</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="conductor" class="label">Conductor:</label>
+              <select class="select-css" fullWidth formControlName="conductor" id="tipo" [compareWith]="compareWith">
+                <option value="">Ninguno</option>
+                <option *ngFor="let item of choferes" [ngValue]="item">
+                  {{ item.nombre_completo }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+       <div class="form-group">
+          <label for="observaciones" class="label">Observaciones:</label>
+          <textarea formControlName="observaciones" rows="3" nbInput fullWidth shape="rectangle" id="observaciones" placeholder="Observaciones"></textarea>
+        </div>
+      </form>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="danger" (click)="cancelar (ref)">Cancelar</button>
+      &nbsp;&nbsp;
+      <button nbButton (click)="submit (ref)" [disabled]="!form.valid">Actualizar</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<ng-template #estadisticas let-data let-ref="dialogRef">
+  <nb-card style="width: 860px; overflow-y: scroll;">
+    <nb-card-header>Estadisticas</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-6">
+          <button nbButton fullWidth>Ok</button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<ng-template #reportes let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>
+      <div class="row">
+        <div class="col-4">
+          Reportes
+        </div>
+
+        <div class="col-4">
+          <nb-select [(ngModel)]="anio_seleccionado" fullWidth placeholder="Año" (ngModelChange)="actualizar_actividades ()">
+            <nb-option value="">Todo</nb-option>
+            <nb-option value="2019">2019</nb-option>
+            <nb-option value="2020">2020</nb-option>
+          </nb-select>
+        </div>
+
+        <div class="col-4">
+          <nb-select [disabled]="anio_seleccionado === ''" [(ngModel)]="mes_seleccionado" fullWidth placeholder="Mes" (ngModelChange)="actualizar_actividades ()">
+            <nb-option value="">Todo</nb-option>
+            <nb-option value="01">Enero</nb-option>
+            <nb-option value="02">Febrero</nb-option>
+            <nb-option value="03">Marzo</nb-option>
+            <nb-option value="04">Abril</nb-option>
+            <nb-option value="05">Mayo</nb-option>
+            <nb-option value="06">Junio</nb-option>
+            <nb-option value="07">Julio</nb-option>
+            <nb-option value="08">Agosto</nb-option>
+            <nb-option value="09">Septiembre</nb-option>
+            <nb-option value="10">Octubre</nb-option>
+            <nb-option value="11">Noviembre</nb-option>
+            <nb-option value="12">Dociembre</nb-option>
+          </nb-select>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col" class="cabezal">Nombre</th>
+            <th scope="col" class="cabezal">Fecha creada</th>
+            <th scope="col" class="cabezal">Cantidad</th>
+            <th scope="col" class="cabezal">Monto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="contenido_table" *ngFor="let item of productos">
+            <th scrope="row">
+              {{ item.nombre }}
+            </th>
+
+            <th scrope="row">
+              {{ item.fecha_creada }}
+            </th>
+
+            <th scrope="row">
+              {{ get_total (item, 'cantidad') }}
+            </th>
+
+            <th scrope="row">
+              {{ get_total (item, 'monto') }}
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-6">
+          <button nbButton fullWidth>Ok</button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<ng-template #dialog_movimientos let-data let-ref="dialogRef" style="overflow-y: scroll;">
+  <nb-card>
+    <nb-card-header>
+      Registrar movimiento
+    </nb-card-header>
+
+    <nb-card-body>
+      <form [formGroup]="form_producto_movimiento">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="tipo_comprobante" class="label">Tipo comprobante:</label>
+              <select class="select-css" fullWidth formControlName="tipo_comprobante" id="tipo_comprobante">
+                <option value="Boleta">Boleta</option>
+                <option value="Factura">Factura</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="nro_comprobante" class="label">N° comprobante:</label>
+              <input type="text" formControlName="nro_comprobante" id="nro_comprobante" nbInput fullWidth placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cliente" class="label">Cliente:</label>
+          <select class="select-css" fullWidth formControlName="cliente" id="cliente">
+            <option value="">Alain Y. Meza Huaman</option>
+            <option value="">Pedro xdxdxd</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="cantidad" class="label">Cantidad:</label>
+              <input type="text" formControlName="cantidad" id="cantidad" nbInput fullWidth placeholder="">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="precio" class="label">Precio:</label>
+              <input type="text" formControlName="precio" id="precio" nbInput fullWidth placeholder="">
+            </div>
+          </div>
+        </div>
+      </form>
+    </nb-card-body>
+
+    <nb-card-footer>
+      <button nbButton status="danger" (click)="cancelar (ref)">Cancelar</button>
+      &nbsp;&nbsp;
+      <button nbButton (click)="submit (ref)" [disabled]="!form_producto_movimiento.valid">Registrar</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<div class="container-fluid">
+  <div style="margin-bottom: 1rem; margin-top: 1rem;" class="row">
+    <div class="col-6">
+      <h4>Productos</h4>
+    </div>
+    <div class="col-3">
+      <button nbButton fullWidth size="tiny" (click)="open_reportes (reportes)">Reportes</button>
+    </div>
+    <div class="col-3">
+      <button nbButton fullWidth size="tiny" (click)="nuevo ()">Registrar producto</button>
+    </div>
+  </div>
+  <form [formGroup]="form">
+    <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col" class="cabezal">Nombre</th>
+        <th scope="col" class="cabezal">Presentacion</th>
+        <th scope="col" class="cabezal">Categoria</th>
+        <th scope="col" class="cabezal">Marca</th>
+        <th scope="col" class="cabezal">Precio Base</th>
+        <th scope="col" class="cabezal">Stock</th>
+        <th scope="col" class="cabezal"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="contenido_table" *ngIf="nuevo_item" [nbSpinner]="nuevo_cargando">
+        <th>
+          <input type="text" formControlName="nombre">
+        </th>
+
+        <th>
+          <input type="text" formControlName="presentacion">
+        </th>
+
+        <th>
+          <select formControlName="categoria" id="tipo" [compareWith]="compareWith">
+            <option *ngFor="let item of categorias" [ngValue]="item">
+              {{ item.nombre }}
+            </option>
+          </select>
+        </th>
+
+        <th>
+          <select formControlName="marca" id="tipo" [compareWith]="compareWith">
+            <option *ngFor="let item of marcas" [ngValue]="item">
+              {{ item.nombre }}
+            </option>
+          </select>
+        </th>
+
+        <th>
+          <input type="number" formControlName="precio_base">
+        </th>
+
+        <th>
+
+        </th>
+
+        <th class="text-center" style="display: inline-flex;">
+          <button [disabled]="!form.valid" (click)="save_nuevo_item (item)">
+            <i class="fas fa-save"></i>
+          </button>
+          <button style="margin-left: 6px;" (click)="cancel_nuevo (item)">
+            <i class="fas fa-times-circle"></i>
+          </button>
+        </th>
+      </tr>
+
+      <tr class="contenido_table" *ngFor="let item of items">
+        <th scope="row" class="">
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.nombre }}</span>
+          <input (input)="check_value ($event, item)" [id]="item.id + '_nombre'" style="width: 80px;" *ngIf="item.editar === true" type="text" [value]="item.nombre">
+        </th>
+        <th>
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.presentacion }}</span>
+          <input (input)="check_value ($event, item)" [id]="item.id + '_presentacion'" style="width: 80px;" *ngIf="item.editar === true" type="text" [value]="item.presentacion">
+        </th>
+        <th>
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.categoria_nombre }}</span>
+          <select [id]="item.id + '_categoria'" *ngIf="item.editar === true" (change)="check_value ($event, item)">
+            <option *ngFor="let c of categorias" [selected]="item.categoria_id === c.id" [value]="c.id">
+              {{ c.nombre }}
+            </option>
+          </select>
+        </th>
+        <th>
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.marca_nombre }}</span>
+          <select [id]="item.id + '_marca'" *ngIf="item.editar === true" (change)="check_value ($event, item)">
+            <option *ngFor="let m of marcas" [selected]="item.marca_id === m.id" [value]="m.id">
+              {{ m.nombre }}
+            </option>
+          </select>
+        </th>
+        <th>
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.precio_base }}</span>
+          <input type="number"  (input)="check_value ($event, item)" [id]="item.id + '_precio_base'" style="width: 80px;"*ngIf="item.editar === true" type="text" [value]="item.precio_base">
+        </th>
+        <th>
+          {{ item.stock }}
+        </th>
+        <th style="display: inline-flex;">
+          <button *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="edit (item)">
+            <i class="fas fa-pencil-alt icono"></i>
+          </button>
+
+          <button style="margin-left: 6px;" *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="agregar_movimiento (item, dialog_movimientos)">
+            <i class="fas fa-exchange-alt"></i>
+          </button>
+
+          <button style="margin-left: 6px;" *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="eliminar (item)">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+
+          <button *ngIf="item.editar === true" [disabled]="item.disabled" (click)="save (item)">
+            <i class="fas fa-save"></i>
+          </button>
+
+          <button style="margin-left: 6px;"  *ngIf="item.editar === true" (click)="cancel (item)">
+            <i class="fas fa-times-circle"></i>
+          </button>
+
+          <button style="margin-left: 6px;" (click)="agregar_clasificacion (item)" *ngIf="(item.editar === false || item.editar === null || item.editar === undefined)">
+            <i class="fas fa-plus"></i>
+          </button>
+        </th>
+      </tr>
+    </tbody>
+    </table>
+  </form>
+</div>

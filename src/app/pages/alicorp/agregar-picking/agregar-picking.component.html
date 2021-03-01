@@ -1,0 +1,161 @@
+<nb-card>
+  <nb-card-body>
+    <nb-stepper orientation="horizontal">
+      <nb-step [label]="labelOne">
+        <ng-template #labelOne>Productos</ng-template>
+          <form>
+            <nb-card>
+              <nb-card-header><h3>Registrar Picking</h3></nb-card-header>
+              <nb-card-body>
+                <div class="form-group">
+                  <label for="file" class="label">Archivo:</label>
+                  <input type="file" id="file" nbInput (change)="onFileChange($event)" />
+                </div>
+              </nb-card-body>
+            </nb-card>
+          </form>
+
+          <nb-card>
+            <nb-card-body>
+              <nb-tabset>
+                <nb-tab *ngFor="let transporte of transportes" badgeStatus="danger" [badgeText]="transporte.items.length" [tabTitle]="'Picking: ' + transporte.Placa">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Producto</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Peso</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Dirección</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of transporte.items">
+                        <th scope="row">{{ item.id }}</th>
+                        <td scope="row">{{ item.nombre }}</td>
+                        <td scope="row">
+                          {{ item.cantidad }} {{ item.um }}
+                        </td>
+                        <td scope="row">
+                          {{ item.precio }}
+                        </td>
+                        <td scope="row">{{ item.peso }} Kg.</td>
+                        <td scope="row">{{ item.cliente_nombre }}</td>
+                        <td scope="row">{{ item.direccion }}</td>
+                        <td>
+                          <button (click)="eliminar_producto (item)">
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </nb-tab>
+              </nb-tabset>
+            </nb-card-body>
+          </nb-card>
+        <button nbButton status="success" nbStepperNext (click)="calcular_ubicacion_clientes ()">Siguiente</button>
+      </nb-step>
+
+      <nb-step [label]="labelTwo">
+        <ng-template #labelTwo>Ruta</ng-template>
+
+        <ng-container *ngFor="let transporte of transportes">
+          <nb-card>
+            <nb-card-header>
+              <div class="row align-items-center">
+                <div class="col-2">
+                  <div [ngStyle]="{'background-color': transporte.color}" class="color-box"></div>
+                </div>
+
+                <div class="col-6">
+                  Ruta Picking: {{ transporte.Placa }}
+                </div>
+
+                <div class="col-4" style="text-align: end;">
+                  <nb-toggle labelPosition="start" [(ngModel)]="transporte.visible" (ngModelChange)="change_visible ()">Visible</nb-toggle>
+                  &nbsp;
+                  <nb-toggle labelPosition="start" [(ngModel)]="transporte.optimizeWaypoints" (ngModelChange)="optimizar (transporte)">Optimizada</nb-toggle>
+                </div>
+              </div>
+            </nb-card-header>
+          <nb-card-header>
+            <div class="row">
+              <div class="col-4">
+                <div class="form-group">
+                  <label for="alias" class="label">Alias:</label>
+                  <input type="text" nbInput fullWidth id="alias" [(ngModel)]="transporte.alias">
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="form-group">
+                  <label for="conductor_id" class="label">Conductor:</label>
+                  <select class="select-css" fullWidth [(ngModel)]="transporte.conductor" id="conductor_id">
+                    <option *ngFor="let item of choferes" [ngValue]="item">
+                      {{ item.nombre_completo }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="form-group">
+                  <label for="vehiculo_id" class="label">Vehiculo:</label>
+                  <select class="select-css" fullWidth [(ngModel)]="transporte.vehiculo" id="vehiculo_id">
+                    <option *ngFor="let item of vehiculos" [ngValue]="item">
+                      {{ item.alias }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </nb-card-header>
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Orden</th>
+                  <th scope="col">Cliente</th>
+                  <th scope="col">Latitud</th>
+                  <th scope="col">longitud</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of transporte.clientes">
+                  <th scope="row">{{ item?.orden + 1 }}</th>
+                  <td>{{ item.nombre }}</td>
+                  <td><input style="width: 124px;" type="number" [(ngModel)]="item.latitud"></td>
+                  <td><input style="width: 124px;" type="number" [(ngModel)]="item.longitud"></td>
+                  <td *ngIf="primera_carga">
+                    <button nbButton style="border-radius: 4px 0px 0px 4px;" [disabled]="item.orden <= 0" size="tiny" (click)="cambiar_orden (transporte, item, -1)">
+                      <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <button nbButton style="border-radius: 0px 4px 4px 0px;" [disabled]="item.orden >= transporte.clientes.length - 1" size="tiny" (click)="cambiar_orden (transporte, item, +1)">
+                      <i class="fas fa-arrow-down"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </nb-card>
+        </ng-container>
+
+        <button nbButton (click)="generar_ruta (true)">Generar</button>
+        <br>
+        <nb-card [nbSpinner]="cargando" nbSpinnerStatus="primary">
+          <div class="map-class">
+            <div #map id="map"></div>
+          </div>
+        </nb-card>
+
+        <button status="danger" nbButton nbStepperPrevious>Atras</button>
+        <button status="success" nbButton nbStepperNext style="margin-left: 1rem;" (click)="submit ()">Registrar cardex</button>
+      </nb-step>
+    </nb-stepper>
+  </nb-card-body>
+</nb-card>

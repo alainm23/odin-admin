@@ -1,0 +1,408 @@
+.eye-button {
+	background-color: Transparent;
+	background-repeat:no-repeat;
+	border: none;
+	cursor:pointer;
+	overflow: hidden;
+  outline:none;
+  width: 38px;
+}
+
+.relative {
+  position: relative;
+}
+
+.alerta {
+  margin-bottom: 0px;
+  position: fixed;
+  z-index: 999999;
+  top: 77px;
+  right: 9px;
+  width: 50%;
+}
+
+.checkbox-ruta {
+	.label {
+		padding-left: 6px !important;
+    	padding-right: 0px !important;
+	}
+}
+
+@font-face{
+    font-family: AvenirHeavy;
+    src : url('assets/font/AEH.ttf')
+}
+@font-face{
+    font-family: AvenirBook;
+    src : url('assets/font/Avenir-Book.ttf')
+}
+
+#map{
+    width: 100%;
+    height: 100%;
+}
+
+button:focus,input:focus,textarea:focus
+{
+  box-shadow: none;
+  outline:none;
+}
+.menu_mapa
+{
+	display: flex;
+	justify-content: flex-start;
+}
+#menu
+{
+	width: 100%;
+	background-color: #014A74;
+	text-align: center;
+	padding-top: 30px;
+	height: auto;
+}
+#mapa
+{
+	width: 100%;
+}
+#imgBmx
+{
+	width: 100%;
+	height: 100px;
+}
+#imgBmx img
+{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.div_btn_iguales
+{
+	width: 33.3%;
+	position: relative;
+}
+.div_btn_iguales .btn_collapse
+{
+	width: 100%;
+	background-color: #0D5B88;
+	border: 0;
+	color: #fff;
+	font-size: 15px;
+	opacity: 66%;
+	font-family: AvenirHeavy;
+}
+.linea_blanco
+{
+	width: 100%;
+	background-color: #fff;
+	height: 2px;
+	position: absolute;
+	bottom: 0;
+	display: none;
+}
+.linea_blanco i
+{
+	position: absolute;
+	bottom: -10px;
+	color: #fff;
+	left: 0;
+	right: 0;
+}
+.btn_collapse:focus
+{
+	background-color: #3589BA;
+	opacity: 1;
+}
+.linea_blanco_delgado
+{
+	width: 100%;
+	height: 1px;
+	background-color: #F4F4F4;
+	opacity: 22%;
+}
+.color_blanco
+{
+	color: #fff;
+}
+a:hover
+{
+	color: #fff;
+	text-decoration: none;
+}
+.font_family_delgado
+{
+	 font-family: AvenirBook;
+	 font-weight: 100;
+}
+.ocultar_div
+{
+	display: none;
+}
+#img_mapa
+{
+	width: 100%;
+	height: 450px;
+}
+#azul
+{
+	background-color: #014A74;
+	display: flex;
+	margin-left: 10px;
+	align-items: center;
+	padding-left: 10px;
+	padding-right:10px;
+
+}
+#azul img
+{
+	width: 37px;
+	height: 20px;
+}
+#azul p
+{
+	font-size: 13px;
+	color:#F4F4F4;
+	margin-left: 10px;
+	margin-top: 10px;
+}
+.horario
+{
+	height: 45px;
+	position: relative;
+	display: flex;
+}
+.horario .liost_iguales span
+{
+	color: #707070;
+  font-size: 14px;
+  padding-left: 12px;
+}
+.liost_iguales
+{
+  border-left: 1px solid #8f9bb3;
+	position: relative;
+}
+
+.hora_8_830::after
+{
+	width: 50%;
+	height: 45px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.hora_830_9::after
+{
+	width: 100%;
+	height: 45px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.hora_930_10::after
+{
+	width: 100%;
+	height: 45px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.hora_1030_11::after
+{
+	width: 100%;
+	height: 45px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.hora_12_1230::after
+{
+	width: 20%;
+	height: 45px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.hora_1230_13::after
+{
+	width: 80%;
+	height: 45px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.hora_1330_14::after
+{
+	width: 100%;
+	height: 45px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.hora_14_1430::after
+{
+	width: 118%;
+	height: 45px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	right: -55px;
+	position: absolute;
+}
+.circulo_blanco
+{
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	position: absolute;
+	left: -10px;
+	background-color: #fff;
+	border: 1px solid #A3A3A3;
+}
+.circulo_blanco_9_30
+{
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	position: absolute;
+	right:-5px;
+	background-color: #fff;
+	border: 1px solid #A3A3A3;
+	z-index: 9999;
+}
+.circulo_verde
+{
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	position: absolute;
+	right: -5px;
+	background-color: #34FF34;
+	border: 1px solid #A3A3A3;
+}
+.circulo_rojo
+{
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	position: absolute;
+	right:-5px;
+	background-color: #FF2121;
+	border: 1px solid #BFBFBF;
+	z-index: 9999;
+}
+.circulo_amarrilo
+{
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	position: absolute;
+	right:-5px;
+	background-color: #E2FF00;
+	border: 1px solid #BFBFBF;
+	z-index: 9999;
+}
+.centrar_objecto
+{
+	display: flex;
+	align-items: center;
+}
+.linea_vetical
+{
+	width: 3px;
+	height: 45px;
+	position: absolute;
+	z-index: 99999;
+	background-color: #707070;
+}
+#img_inicio_ruta
+{
+	position: absolute;
+	right: 20px;
+	z-index: 99999;
+}
+#img_circulo
+{
+	position: absolute;
+	right: 17px;
+	z-index: 99999;
+}
+#img_bandera_negra
+{
+	right: -75px;
+	position: absolute;
+	z-index: 999999;
+}
+.bandera_blanca
+{
+	position: absolute;
+	top: -10px;
+	z-index: 9999999;
+}
+.bandera_roja
+{
+	position: absolute;
+	top: -10px;
+	z-index: 9999999;
+}
+.bandera_amarilla
+{
+	position: absolute;
+	top: -10px;
+	z-index: 9999999;
+}
+.tooltip-inner {
+    background-color: #E2FF00;
+}
+.tooltip.bs-tooltip-right .arrow:before {
+    border-right-color: #E2FF00 !important;
+}
+.tooltip.bs-tooltip-left .arrow:before {
+    border-right-color: #E2FF00 !important;
+}
+.tooltip.bs-tooltip-bottom .arrow:before {
+    border-right-color: #E2FF00 !important;
+}
+.tooltip.bs-tooltip-top .arrow:before {
+    border-right-color: #E2FF00 !important;
+}
+
+.circulo_amarrilo.tooltips {
+    position: absolute;
+    display: inline;
+}
+.circulo_amarrilo.tooltips span {
+    position: absolute;
+    width:140px;
+    color: #FFFFFF;
+    background: #000000;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    visibility: hidden;
+    border-radius: 6px;
+    z-index: 99999;
+}
+.circulo_amarrilo.tooltips span:after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -8px;
+    width: 0; height: 0;
+    border-bottom: 8px solid #000000;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+}
+.circulo_amarrilo:hover.tooltips span {
+    visibility: visible;
+    opacity: 0.8;
+    top: 30px;
+    left: 50%;
+    margin-left: -76px;
+    z-index: 999;
+}
+
+.pista {
+  background-color: #D6D6D6;
+  position: relative;
+}

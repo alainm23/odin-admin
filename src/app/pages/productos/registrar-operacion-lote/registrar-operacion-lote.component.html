@@ -1,0 +1,150 @@
+<!-- <div class="container-fluid">
+  <div class="row">
+    <div class="col-6">
+      <div class="form-group has-search">
+        <span class="fa fa-search form-control-feedback"></span>
+        <input type="text" class="form-control" placeholder="Search" [(ngModel)]="search_term" (ngModelChange)="search_changed ()">
+      </div>
+  
+      <!-- <ul id="myUL" style="position: absolute; width: 100%;">
+        <li><a><em>Ad</em>ele</a></li>
+        <li><a>Agnes</a></li>
+  
+        <li><a>Billy</a></li>
+        <li><a>Bob</a></li>
+  
+        <li><a>Calvin</a></li>
+        <li><a>Christina</a></li>
+        <li><a>Cindy</a></li>
+      </ul>>
+    </div>
+
+    <div class="col">
+    </div>
+
+    <div class="col">
+    <div>
+  </div>
+
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col" class="cabezal">Nombre</th>
+      <th scope="col" class="cabezal">Precio Base</th>
+      <th scope="col" class="cabezal">Stock</th>
+      <th scope="col" class="cabezal"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="contenido_table">
+      <th>
+        {{ items.nombre }}
+      </th>
+
+      <th>
+        {{ items.precio }}
+      </th>
+
+      <th>
+        {{ items.stock }}
+      </th>
+
+      <th class="text-center" style="display: inline-flex;">
+
+      </th>
+    </tr>
+  </tbody>
+  </table>
+</div> -->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="form-group has-search">
+        <span class="fa fa-search form-control-feedback"></span>
+        <input type="text" class="form-control" placeholder="Search" [(ngModel)]="search_term" (ngModelChange)="search_changed ()">
+      </div>
+
+      <ul id="myUL" style="width: 100%;" *ngIf="resultado.length > 0">
+        <li *ngFor="let item of resultado" (click)="add_item (item)">
+          <a>{{ item.nombre }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="tipo_comprobante" class="label">Tipo comprobante:</label>
+            <select class="select-css" fullWidth id="tipo_comprobante">
+              <option value="Boleta">Boleta</option>
+              <option value="Factura">Factura</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="nro_comprobante" class="label">N° comprobante:</label>
+            <input type="text" id="nro_comprobante" nbInput fullWidth placeholder="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col" class="cabezal">Nombre</th>
+          <th scope="col" class="cabezal">Presentacion</th>
+          <th scope="col" class="cabezal">Cantidad</th>
+          <th scope="col" class="cabezal">Precio</th>
+          <th scope="col" class="cabezal"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="contenido_table" *ngFor="let item of items">
+          <th>
+            {{ item.nombre }}
+          </th>
+
+          <th>
+            {{ item.presentacion }}
+          </th>
+
+          <th>
+            <input type="number" [(ngModel)]="item.cantidad">
+          </th>
+
+          <th>
+            <input type="number" [(ngModel)]="item.precio">
+          </th>
+
+          <th class="text-center" style="display: inline-flex;">
+            <button style="margin-left: 6px;" (click)="eliminar (item)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+
+    </div>
+
+    <div class="col-4">
+      <button style="width: 100%;">Cancelar</button>
+    </div>
+
+    <div class="col-4">
+      <button style="width: 100%;" (click)="agregar_bloque ()">Procesar</button>
+    </div>
+  </div>
+</div>

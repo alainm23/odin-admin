@@ -1,0 +1,205 @@
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card [nbSpinner]="loading" nbSpinnerStatus="primary" style="overflow-y: scroll; height: -webkit-fill-available; max-height: 500px;">
+    <nb-card-header>
+      <div class="row">
+        <div class="col-9">
+          <b>Vehiculo:</b> {{ data.alias }}
+        </div>
+
+        <div class="col-3 text-right">
+          <button nbButton (click)="ref.close ()">Cerrar</button>
+        </div>
+      </div>
+
+    </nb-card-header>
+
+    <table *ngIf="recargas_gas.length > 0" class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col" class="cabezal">Fecha & Hora</th>
+          <th scope="col" class="cabezal">Kilometraje</th>
+          <th scope="col" class="cabezal">Galones</th>
+          <th scope="col" class="cabezal">Nro° de boleta / Factura</th>
+          <th scope="col" class="cabezal">Foto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="contenido_table" *ngFor="let item of recargas_gas">
+          <th>{{ get_date_format (item.fecha_registro) }}</th>
+          <th>{{ item.kilometraje }}</th>
+          <th>{{ item.numero_galones }}</th>
+          <th>{{ item.nro_boleta_factura }}</th>
+          <th><img *ngIf="item.imagen !== undefined" style="width: 128px;" [src]="item.imagen"></th>
+        </tr>
+      </tbody>
+
+      <div *ngIf="recargas_gas.length <= 0" class="text-center">
+        No hay informacion para mostrar
+      </div>
+    </table>
+  </nb-card>
+</ng-template>
+
+<ng-template #registrar let-data let-ref="dialogRef">
+  <form [formGroup]="form">
+    <nb-card>
+      <nb-card-header>Registrar nuevo vehiculo</nb-card-header>
+      <nb-card-body>
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="alias" class="label">Alias:</label>
+              <input type="text" fieldSize="small" formControlName="alias" id="alias" nbInput fullWidth placeholder="">
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-group">
+              <label for="nro_placa" class="label">Nro. Placa:</label>
+              <input type="text" fieldSize="small" formControlName="nro_placa" id="nro_placa" nbInput fullWidth placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="marca" class="label">Marca:</label>
+              <input type="text" fieldSize="small" formControlName="marca" id="marca" nbInput fullWidth>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-group">
+              <label for="modelo" class="label">Modelo:</label>
+              <input type="text" fieldSize="small" formControlName="modelo" id="modelo" nbInput fullWidth placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="peso_carga_bruta" class="label">Carga Máxima (Kg):</label>
+              <input type="number" fieldSize="small" formControlName="peso_carga_bruta" id="peso_carga_bruta" nbInput fullWidth placeholder="">
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-group">
+              <label for="volumen_carga_bruta" class="label">Volumen Máximo:</label>
+              <input type="number" fieldSize="small" formControlName="volumen_carga_bruta" id="volumen_carga_bruta" nbInput fullWidth placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="conductor" class="label">Conductor:</label>
+          <select class="select-css" fullWidth formControlName="conductor" id="tipo" [compareWith]="compareWith">
+            <option value="">Ninguno</option>
+            <option *ngFor="let item of choferes" [ngValue]="item">
+              {{ item.nombre_completo }}, DNI: {{ item.dni }}, TEL: {{ item.celular }}
+            </option>
+          </select>
+        </div>
+      </nb-card-body>
+      <nb-card-footer>
+        <button nbButton status="success" (click)="submit (ref)" [disabled]="!form.valid">Registrar</button>
+      </nb-card-footer>
+    </nb-card>
+  </form>
+</ng-template>
+
+<div [nbSpinner]="loading" class="container-fluid">
+  <div style="margin-bottom: 1rem; margin-top: 1rem;" class="row">
+    <div class="col-6">
+      <h4>Vehiculos</h4>
+    </div>
+    <div class="col-3">
+
+    </div>
+    <div class="col-3" style="align-self: center;">
+      <button nbButton fullWidth size="tiny" (click)="registrar_modal (registrar)">Registrar</button>
+    </div>
+  </div>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col" class="cabezal placa_tipo">Placa</th>
+        <th scope="col" class="cabezal alaias_modelo">Alias</th>
+        <th scope="col" class="cabezal marca">Marca</th>
+        <th scope="col" class="cabezal alaias_modelo">Modelo</th>
+        <th scope="col" class="cabezal alaias_modelo">Conductor</th>
+        <th scope="col" class="cabezal carga_volumen_ano text-center">Carga max</th>
+        <th scope="col" class="cabezal carga_volumen_ano text-center">Volumen</th>
+        <th scope="col" class="cabezal">Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="contenido_table" *ngFor="let item of items">
+        <th scope="row">
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.nro_placa }}</span>
+          <input fieldSize="tiny" nbInput fullWidth (input)="check_value ($event, item)" [id]="item.id + '_nro_placa'" *ngIf="item.editar === true" type="text" [value]="item.nro_placa">
+        </th>
+
+        <th>
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.alias }}</span>
+          <input fieldSize="tiny" nbInput fullWidth (input)="check_value ($event, item)" [id]="item.id + '_alias'" *ngIf="item.editar === true" type="text" [value]="item.alias">
+        </th>
+
+        <th>
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.marca }}</span>
+          <input fieldSize="tiny" nbInput fullWidth (input)="check_value ($event, item)" [id]="item.id + '_marca'" *ngIf="item.editar === true" type="text" [value]="item.marca">
+        </th>
+
+        <th>
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.modelo }}</span>
+          <input fieldSize="tiny" nbInput fullWidth (input)="check_value ($event, item)" [id]="item.id + '_modelo'" *ngIf="item.editar === true" type="text" [value]="item.modelo">
+        </th>
+
+        <th>
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.conductor.nombre_completo }}</span>
+          <select class="select-css" *ngIf="item.editar === true" fullWidth [(ngModel)]="item.conductor" [id]="item.id + '_conductor'" [compareWith]="compareWith">
+            <option value="">Ninguno</option>
+            <option *ngFor="let item of choferes" [ngValue]="item">
+              {{ item.nombre_completo }}
+            </option>
+          </select>
+        </th>
+
+        <th>
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.peso_carga_bruta }}</span>
+          <input fieldSize="tiny" nbInput fullWidth (input)="check_value ($event, item)" [id]="item.id + '_peso_carga_bruta'" style="width: 80px;" *ngIf="item.editar === true" type="text" [value]="item.peso_carga_bruta">
+        </th>
+
+        <th>
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.volumen_carga_bruta }}</span>
+          <input fieldSize="tiny" nbInput fullWidth (input)="check_value ($event, item)" [id]="item.id + '_volumen_carga_bruta'" style="width: 80px;"*ngIf="item.editar === true" type="text" [value]="item.volumen_carga_bruta">
+        </th>
+
+        <th>
+          <button nbButton size="small" ghost status="light" *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="edit (item)">
+            <i class="fas fa-pencil-alt icono"></i>
+          </button>
+
+          <button title="Carga de combustible" nbButton size="small" ghost status="light" *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="ver_carga_combustible (item, dialog)">
+            <i class="fas fa-gas-pump icono"></i>
+          </button>
+
+          <button nbButton size="small" ghost status="light" *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="delete (item)">
+            <i class="fas fa-trash-alt icono"></i>
+          </button>
+
+          <button nbButton size="small" ghost status="light" *ngIf="item.editar === true" [disabled]="item.disabled" (click)="save (item)">
+            <i class="fas fa-save"></i>
+          </button>
+
+          <button nbButton size="small" ghost status="light" style="margin-left: 6px;" *ngIf="item.editar === true" (click)="cancel (item)">
+            <i class="fas fa-times-circle"></i>
+          </button>
+        </th>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Administrador Odin Transportes</title>
+
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- Libreria de Google Maps -->
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDGdZglXMr6p-jLDd-Czlmdjm4g8Ul6e8&libraries=places"></script>
+
+  <!-- for the search only version -->
+  <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+
+  <!-- for the default version -->
+  <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch.umd.js"></script>
+
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+  <script>
+    window.OneSignal = window.OneSignal || [];
+    OneSignal.push (function() {
+      OneSignal.init ({
+        appId: "44a9bc94-1355-4e1d-bda3-9b04a5c47316",
+      });
+
+      OneSignal.getTags (function(tags) {
+        // All the tags stored on the current webpage visitor
+        console.log (tags);
+      });
+
+      OneSignal.getTags ().then(function(tags) {
+        // All the tags stored on the current webpage visitor
+        console.log (tags);
+      });
+
+      OneSignal.sendTag ("Administrador", "true");
+    });
+  </script>
+<link rel="stylesheet" href="styles.4ee6d0d3129bd03924a0.css"></head>
+<body>
+  <ngx-app></ngx-app>
+<script src="runtime-es2015.0127ada22e28152cdd2d.js" type="module"></script><script src="polyfills-es2015.20c647a9e900aecdf6ea.js" type="module"></script><script src="runtime-es5.ecfa0221f3377558f658.js" nomodule></script><script src="polyfills-es5.0819b14ddc91b9074488.js" nomodule></script><script src="scripts.eb45de723c2271b812ef.js"></script><script src="main-es2015.e5af7c29b2239987da29.js" type="module"></script><script src="main-es5.54fd64a70ed02f4e811a.js" nomodule></script></body>
+</html>

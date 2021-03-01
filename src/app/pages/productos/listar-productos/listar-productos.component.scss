@@ -1,0 +1,47 @@
+.table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+    border: 2px solid #f0f0f0;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    font-size: 12px;
+}
+.cabezal
+{
+	background-color: #D6D6D6;
+	color: #014A74;
+}
+.contenido_table th
+{
+	background-color: #e3e2e2;
+	color: #4D4D4D;
+	font-weight: lighter;
+}
+.fondo_blanco_table th
+{
+	background-color: #fff;
+}
+.alaias_modelo
+{
+	width: 240px;
+}
+.proximo_service
+{
+	width: 150px;
+}
+.carga_volumen_ano
+{
+	width: 86px;
+}
+.marca
+{
+	width: 150px;
+}
+.placa_tipo
+{
+	width: 100px;
+}
+.icono
+{
+	font-size: 12px;
+}

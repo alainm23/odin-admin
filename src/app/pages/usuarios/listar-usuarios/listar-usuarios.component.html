@@ -1,0 +1,111 @@
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>Editar</nb-card-header>
+    <nb-card-body>
+      <form [formGroup]="form">
+        <div class="form-group">
+          <label for="nombre_completo" class="label">Nombre completo:</label>
+          <input type="text" formControlName="nombre_completo" id="nombre_completo" nbInput fullWidth placeholder="Nombre completo">
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="dni" class="label">DNI:</label>
+              <input type="text" formControlName="dni" id="dni" nbInput fullWidth placeholder="DNI">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="celular" class="label">Celular:</label>
+              <input type="text" formControlName="celular" id="celular" nbInput fullWidth placeholder="Nombre comercial">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="direccion" class="label">Direccion:</label>
+              <input type="text" formControlName="direccion" id="direccion" nbInput fullWidth placeholder="Nombre comercial">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="email" class="label">Email:</label>
+              <input type="text" formControlName="email" id="email" nbInput fullWidth placeholder="Nombre comercial">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="observaciones" class="label">Observaciones:</label>
+          <textarea formControlName="observaciones" rows="3" nbInput fullWidth shape="rectangle" id="observaciones" placeholder="Observaciones"></textarea>
+        </div>
+      </form>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="danger" (click)="cancelar (ref)">Cancelar</button>
+      &nbsp;&nbsp;
+      <button nbButton (click)="submit (ref)" [disabled]="!form.valid">Actualizar</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<nb-card>
+  <nb-card-header>
+    <div style="margin-bottom: 1rem; margin-top: 1rem;" class="row">
+      <div class="col-6">
+
+      </div>
+      <div class="col-3">
+
+      </div>
+      <div class="col-3">
+        <button style="width: 100%;" (click)="registrar ()">Registrar</button>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th scope="col">DNI</th>
+          <th scope="col">Nombre completo</th>
+          <th scope="col">Celular</th>
+          <th scope="col">Direccion</th>
+          <th scope="col">Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <td>
+            {{ item.dni }}
+          </td>
+
+          <td>
+            {{ item.nombre_completo }}
+          </td>
+
+          <td>
+            {{ item.celular }}
+          </td>
+
+          <td>
+            {{ item.direccion }}
+          </td>
+
+          <td style="display: flex;">
+            <button nbButton fullWidth size="tiny" ghost (click)="editar (item, dialog)">
+              <nb-icon icon="edit-outline"></nb-icon>
+            </button>
+
+            <button nbButton fullWidth size="tiny" ghost (click)="delete (item)">
+              <nb-icon icon="trash-outline"></nb-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </nb-card-body>
+</nb-card>

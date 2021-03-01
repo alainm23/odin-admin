@@ -1,0 +1,19 @@
+<!-- <ngx-one-column-layout>
+  <!--nb-menu [items]="menu"></nb-menu>
+  
+</ngx-one-column-layout> -->
+
+<nb-layout>
+  <nb-layout-header fixed>
+    <ngx-header></ngx-header>
+    <!--button nbButton status="success" size="tiny" (click)="toggle ()">Toggle</button-->
+  </nb-layout-header>
+
+  <nb-sidebar style="background-color: #014A74;" tag="left">
+    <ngx-sidebar></ngx-sidebar>
+  </nb-sidebar>
+
+  <nb-layout-column class="no-padding">
+    <router-outlet></router-outlet>
+  </nb-layout-column>
+</nb-layout>

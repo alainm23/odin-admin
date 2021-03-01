@@ -1,0 +1,126 @@
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+
+#myUL {
+    /* Remove default list styling */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#myUL li a {
+    border: 1px solid #ddd; /* Add a border to all links */
+    margin-top: -1px; /* Prevent double borders */
+    background-color: #f6f6f6; /* Grey background color */
+    padding: 12px; /* Add some padding */
+    text-decoration: none; /* Remove default text underline */
+    font-size: 18px; /* Increase the font-size */
+    color: black; /* Add a black text color */
+    display: block; /* Make it into a block element to fill the whole list */
+}
+
+#myUL li a:hover:not(.header) {
+    background-color: #eee; /* Add a hover effect to all links, except for headers */
+}
+
+.select-css {
+    width: 100%;
+    background-color: #f7f9fc;
+    border-color: #edf1f7;
+    border-style: solid;
+    border-width: 1px;
+    color: #1a2138;
+    font-family: Open Sans, sans-serif;
+    -webkit-appearance: none;
+    transition-duration: 0.15s;
+    transition-property: border, background-color, color, box-shadow;
+    transition-timing-function: ease-in;
+    height: 38px;
+    border-radius: 4px;
+    padding: 0px 0px 0px 12px;
+    font-weight: 600;
+}
+
+.imagen_preview {
+    width: 128px;
+}
+
+.select-css {
+    width: 100%;
+    background-color: #f7f9fc;
+    border-color: #edf1f7;
+    border-style: solid;
+    border-width: 1px;
+    color: #1a2138;
+    font-family: Open Sans, sans-serif;
+    -webkit-appearance: none;
+    transition-duration: 0.15s;
+    transition-property: border, background-color, color, box-shadow;
+    transition-timing-function: ease-in;
+    height: 38px;
+    border-radius: 4px;
+    padding: 0px 0px 0px 12px;
+    font-weight: 600;
+}
+
+.table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+    border: 2px solid #f0f0f0;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    font-size: 12px;
+}
+.cabezal
+{
+	background-color: #D6D6D6;
+	color: #014A74;
+}
+.contenido_table th
+{
+	background-color: #e3e2e2;
+	color: #4D4D4D;
+	font-weight: lighter;
+}
+.fondo_blanco_table th
+{
+	background-color: #fff;
+}
+.alaias_modelo
+{
+	width: 240px;
+}
+.proximo_service
+{
+	width: 150px;
+}
+.carga_volumen_ano
+{
+	width: 86px;
+}
+.marca
+{
+	width: 150px;
+}
+.placa_tipo
+{
+	width: 100px;
+}
+.icono
+{
+	font-size: 12px;
+}

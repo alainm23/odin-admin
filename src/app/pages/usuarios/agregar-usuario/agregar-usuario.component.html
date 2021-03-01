@@ -1,0 +1,62 @@
+<div class="col-lg-6">
+  <form [formGroup]="form">
+    <nb-card>
+      <nb-card-header>Registrar nuevo usuario</nb-card-header>
+      <nb-card-body>
+        <div class="form-group">
+          <label for="tipo" class="label">Tipo de usuario:</label>
+          <select class="select-css" fullWidth formControlName="tipo" id="tipo">
+            <option value="1">Administrador</option>
+            <option value="2">Almacén</option>
+            <option value="3">Conductor</option>
+            <option value="4">Alicorp</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="nombre_completo" class="label">Nombre completo:</label>
+          <input type="text" formControlName="nombre_completo" id="nombre_completo" nbInput fullWidth placeholder="Nombre completo">
+        </div>
+
+        <div class="form-group">
+          <label for="dni" class="label">DNI:</label>
+          <input type="text" formControlName="dni" id="dni" nbInput fullWidth placeholder="DNI">
+        </div>
+
+        <div class="form-group">
+          <label for="direccion" class="label">Direccion:</label>
+          <input type="text" formControlName="direccion" id="direccion" nbInput fullWidth placeholder="Nombre comercial">
+        </div>
+
+        <div class="form-group">
+          <label for="celular" class="label">Celular:</label>
+          <input type="text" formControlName="celular" id="celular" nbInput fullWidth placeholder="Nombre comercial">
+        </div>
+
+        <div class="form-group">
+          <label for="observaciones" class="label">Observaciones:</label>
+          <textarea formControlName="observaciones" rows="5" nbInput fullWidth shape="rectangle" id="observaciones" placeholder="Observaciones"></textarea>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+    <nb-card>
+      <nb-card-header>Datos de acceso</nb-card-header>
+      <nb-card-body>
+        <div class="form-group">
+          <label for="email" class="label">Correo:</label>
+          <input type="text" formControlName="email" id="email" nbInput fullWidth>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="label">Contraseña:</label>
+          <input type="text" formControlName="password" id="password" nbInput fullWidth>
+        </div>
+      </nb-card-body>
+
+      <nb-card-footer>
+        <button nbButton status="danger" (click)="submit ()" [disabled]="!form.valid">Agregar</button>
+      </nb-card-footer>
+    </nb-card>
+  </form>
+</div>

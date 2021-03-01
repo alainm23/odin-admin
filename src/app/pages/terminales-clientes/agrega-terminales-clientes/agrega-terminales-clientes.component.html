@@ -1,0 +1,64 @@
+<div class="col-lg-6">
+  <form [formGroup]="form">
+    <nb-card>
+      <nb-card-header>Registrar nuevo chofer</nb-card-header>
+      <nb-card-body>
+        <div class="form-group">
+          <label for="nombre_cliente" class="label">Nombre del cliente:</label>
+          <input type="text" formControlName="nombre_cliente" id="nombre_cliente" nbInput fullWidth>
+        </div>
+
+        <div class="form-group">
+          <label for="ruc" class="label">RUC:</label>
+          <input type="text" formControlName="ruc" id="ruc" nbInput fullWidth>
+        </div>
+
+        <div class="form-group">
+          <label for="tipo" class="label">Tipo:</label>
+          <select class="select-css" fullWidth formControlName="tipo" id="tipo">
+            <option value=1>Administrador</option>
+            <option value=2>Carrito vendedor</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono" class="label">Telefono:</label>
+          <input type="text" formControlName="telefono" id="telefono" nbInput fullWidth>
+        </div>
+
+        <div class="form-group">
+          <label for="correo" class="label">Correo:</label>
+          <input type="email" formControlName="correo" id="correo" nbInput fullWidth>
+        </div>
+
+        <div class="form-group">
+          <label for="direccion" class="label">Dirección completa:</label>
+          <input type="text" formControlName="direccion" id="direccion" nbInput fullWidth>
+        </div>
+
+        <div class="form-group">
+          <label for="referencia" class="label">Referencia:</label>
+          <input type="text" formControlName="referencia" id="referencia" nbInput fullWidth>
+        </div>
+
+        <div class="form-group">
+          <label for="latitud" class="label">Latitud:</label>
+          <input type="number" formControlName="latitud" id="latitud" nbInput fullWidth>
+        </div>
+
+        <div class="form-group">
+          <label for="longitud" class="label">Longitud:</label>
+          <input type="number" formControlName="longitud" id="longitud" nbInput fullWidth>
+        </div>
+        
+        <div class="form-group">
+          <label for="persona_contacto" class="label">Persona contacto:</label>
+          <input type="text" formControlName="persona_contacto" id="persona_contacto" nbInput fullWidth>
+        </div>
+      </nb-card-body>
+      <nb-card-footer>
+        <button nbButton status="danger" (click)="submit ()" [disabled]="!form.valid">Agregar</button>
+      </nb-card-footer>
+    </nb-card>
+  </form>
+</div>

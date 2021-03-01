@@ -1,0 +1,174 @@
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card style="width: 860px; overflow-y: scroll;">
+    <nb-card-header>Estadisticas</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-6">
+          <button nbButton fullWidth>Ok</button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<ng-template #reportes let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>
+      <div class="row">
+        <div class="col-4">
+          Reportes
+        </div>
+
+        <div class="col-4">
+          <nb-select [(ngModel)]="anio_seleccionado" fullWidth placeholder="Año" (ngModelChange)="actualizar_actividades ()">
+            <nb-option value="">Todo</nb-option>
+            <nb-option value="2019">2019</nb-option>
+            <nb-option value="2020">2020</nb-option>
+          </nb-select>
+        </div>
+
+        <div class="col-4">
+          <nb-select [disabled]="anio_seleccionado === ''" [(ngModel)]="mes_seleccionado" fullWidth placeholder="Mes" (ngModelChange)="actualizar_actividades ()">
+            <nb-option value="">Todo</nb-option>
+            <nb-option value="01">Enero</nb-option>
+            <nb-option value="02">Febrero</nb-option>
+            <nb-option value="03">Marzo</nb-option>
+            <nb-option value="04">Abril</nb-option>
+            <nb-option value="05">Mayo</nb-option>
+            <nb-option value="06">Junio</nb-option>
+            <nb-option value="07">Julio</nb-option>
+            <nb-option value="08">Agosto</nb-option>
+            <nb-option value="09">Septiembre</nb-option>
+            <nb-option value="10">Octubre</nb-option>
+            <nb-option value="11">Noviembre</nb-option>
+            <nb-option value="12">Dociembre</nb-option>
+          </nb-select>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col" class="cabezal">Nombre</th>
+            <th scope="col" class="cabezal">Fecha creada</th>
+            <th scope="col" class="cabezal">Cantidad</th>
+            <th scope="col" class="cabezal">Monto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="contenido_table" *ngFor="let item of items">
+            <th scrope="row">
+              {{ item.nombre }}
+            </th>
+
+            <th scrope="row">
+              {{ item.fecha_creada }}
+            </th>
+
+            <th scrope="row">
+              {{ get_total (item, 'cantidad') }}
+            </th>
+
+            <th scrope="row">
+              {{ get_total (item, 'monto') }}
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-6">
+          <button nbButton fullWidth>Ok</button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<ng-template #nuevo_dialog let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>
+      Registrar nueva marca
+    </nb-card-header>
+    <nb-card-body>
+      <form [formGroup]="form">
+        <div class="form-group">
+          <label for="nombre" class="label">Nombre:</label>
+          <input type="text" formControlName="nombre" id="nombre" nbInput fullWidth placeholder="">
+        </div>
+      </form>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="danger" (click)="cancelar_nuevo (ref)">Cancelar</button>
+      &nbsp;&nbsp;
+      <button nbButton (click)="agregar_categoria (ref)" [disabled]="!form.valid">Agregar</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<div class="container-fluid">
+  <div style="margin-bottom: 1rem;" class="row">
+    <div class="col-6">
+
+    </div>
+    <div class="col-3">
+      <button style="width: 100%;" (click)="open_reportes (reportes)">Reportes</button>
+    </div>
+    <div class="col-3">
+      <button style="width: 100%;" (click)="open_nuevo_dialog (nuevo_dialog)">Registrar categoria</button>
+    </div>
+  </div>
+  <!-- <form [formGroup]="form"> -->
+    <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col" class="cabezal">Nombre</th>
+        <th scope="col" class="cabezal">Cantidad</th>
+        <th scope="col" class="cabezal">Creado</th>
+        <th scope="col" class="cabezal"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="contenido_table" *ngFor="let item of items">
+        <th scope="row">
+          <span *ngIf="item.editar === false || item.editar === null || item.editar === undefined">{{ item.nombre }}</span>
+          <input (input)="check_value ($event, item)" [id]="item.id + '_nombre'" style="width: 80px;" *ngIf="item.editar === true" type="text" [value]="item.nombre">
+        </th>
+        <th>
+          {{ item.cantidad_productos }}
+        </th>
+        <th>
+          {{ item.fecha_creada }}
+        </th>
+        <th style="display: inline-flex; border: 0px; width: 100%; margin: 0px;">
+          <button *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="edit (item)">
+            <i class="fas fa-pencil-alt icono"></i>
+          </button>
+
+          <button style="margin-left: 6px;" *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="eliminar (item)">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+
+          <button style="margin-left: 6px;" *ngIf="item.editar === false || item.editar === null || item.editar === undefined" (click)="ver_estadisticas (item, dialog)">
+            <i class="fas fa-chart-line"></i>
+          </button>
+
+          <button *ngIf="item.editar === true" [disabled]="item.disabled" (click)="save (item)">
+            <i class="fas fa-save"></i>
+          </button>
+
+          <button style="margin-left: 6px;"  *ngIf="item.editar === true" (click)="cancel_edicion (item)">
+            <i class="fas fa-times-circle"></i>
+          </button>
+        </th>
+      </tr>
+    </tbody>
+    </table>
+</div>

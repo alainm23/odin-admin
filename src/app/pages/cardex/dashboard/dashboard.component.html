@@ -1,0 +1,236 @@
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card [nbSpinner]="alerta_loading" nbSpinnerStatus="primary" style="width: 600px;">
+    <nb-card-header>Alerta de cliente: {{ data.cliente.cliente_nombre }}</nb-card-header>
+    <nb-card-body>
+      <ng-container *ngIf="data.cliente.hora_ausencia !== null">
+        <p style="margin-bottom: 0px;"><b>Tipo:</b> Ausencia</p>
+      </ng-container>
+
+      <ng-container *ngIf="data.cliente.hora_rechazo_total !== null">
+        <p style="margin-bottom: 0px;"><b>Tipo:</b> Rechazo total</p>
+      </ng-container>
+
+      <p style="margin-bottom: 0px;"><b>Pedido:</b> {{ data.cardex.alias }}</p>
+      <p style="margin-bottom: 0px;"><b>Direccion:</b> {{ data.cliente.cliente_direccion }}</p>
+      <p style="margin-bottom: 0px;"><b>Vehiculo:</b> {{ data.cardex.vehiculo_alias }}</p>
+      <ng-container *ngIf="data.cliente.hora_ausencia !== null">
+        <p style="margin-bottom: 0px;"><b>Hora:</b> {{ timestamp_to_date (data.cliente.hora_ausencia) }}</p>
+      </ng-container>
+
+      <ng-container *ngIf="data.cliente.hora_rechazo_total !== null">
+        <p style="margin-bottom: 0px;"><b>Hora:</b> {{ timestamp_to_date (data.cliente.hora_rechazo_total) }}</p>
+      </ng-container>
+
+      <p><b>Conductor: </b>{{ data.cardex.conductor_nombre }}</p>
+
+      <ng-container *ngIf="data.cliente.ausencia_imagen !== undefined">
+        <img style="width: 128px;" [src]="data.cliente.ausencia_imagen">
+      </ng-container>
+    </nb-card-body>
+    <nb-card-footer>
+      <button size="small" nbButton (click)="cerrar_alerta_modal (ref, data)">Cerrar</button>
+      &nbsp;&nbsp;
+      <button size="small" nbButton status="danger" (click)="cancelar_pedido (data, ref)">Pasar al proximo cliente</button>
+      &nbsp;&nbsp;
+      <button size="small" nbButton status="primary" (click)="desbloquear_pedido (data, ref)">Continuar con cliente actual</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<ng-template #dialog_detalle_pedido let-data let-ref="dialogRef">
+  <nb-card style="width: 750px;">
+    <nb-card-header>
+      <strong>Detalle de pedido:</strong> {{ data.cliente.nombre }}
+      <p style="margin-bottom: 0px;"><strong>Fin de descarga: </strong>{{ timestamp_to_date (data.cliente.hora_fin_descarga) }}</p>
+      <p style="margin-bottom: 0px;"><strong>Tipo de descarga: </strong><span *ngIf="data.cliente.tipo_descarga === 'completo'">Completo</span><span *ngIf="data.cliente.tipo_descarga === 'parcial'">Parcial</span><span *ngIf="data.cliente.tipo_descarga === 'rechazado'">Rechazo</span></p>
+    </nb-card-header>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col" class="cabezal">Nombre</th>
+          <th scope="col" class="cabezal">Cantidad</th>
+          <th scope="col" class="cabezal">Unidad Medida</th>
+          <th scope="col" class="cabezal">Estado</th>
+          <th scope="col" class="cabezal" style="width: 240px;">Motivo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="contenido_table" *ngFor="let producto of data.cliente.productos">
+          <th>
+            {{ producto.nombre }}
+          </th>
+
+          <th>
+            {{ producto.cantidad }}
+          </th>
+
+          <th>
+            {{ producto?.um }}
+          </th>
+
+          <th>
+            <span *ngIf="producto.estado === 'entrega_completa'">
+              Completo
+            </span>
+
+            <span *ngIf="producto.estado === 'rechazado_total'">
+              Rechazado
+            </span>
+            <span *ngIf="producto.estado === 'rechazado_parcial'">
+              Rechazo parcial: {{ producto.rechazo_cantidad }} {{ producto?.um }}
+            </span>
+          </th>
+
+          <th scope="row">
+            {{ producto.rechazo_motivo }}
+          </th>
+        </tr>
+      </tbody>
+    </table>
+    <nb-card-footer>
+      <button size="small" nbButton (click)="ref.close ()">Cerrar</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<div class="alerta">
+  <nb-alert *ngFor="let item of eventos_alertas_asusencia | keyvalue" status="danger" style="margin-bottom: 0px; margin-top: 12px;" (click)="ver_alerta (dialog, item.value.pedido, item.value.cliente)">
+    Alerta de ausencia
+  </nb-alert>
+
+  <nb-alert *ngFor="let item of eventos_alertas_rechazo_total | keyvalue" status="danger" style="margin-bottom: 0px; margin-top: 12px;" (click)="ver_alerta (dialog, item.value.pedido, item.value.cliente)">
+    Alerta de rechazo total
+  </nb-alert>
+</div>
+
+<div id="mapa" class="relative">
+  <div id="img_mapa">
+    <div #map id="map"></div>
+  </div>
+
+  <div style="display: flex; width: 100%;">
+    <div style="width: 240px;">
+      <div style="display: flex;" class="horario">
+        <input style="margin-left: 24px;" [(ngModel)]="range" (ngModelChange)="range_changed ()" type="range" min="120" max="480" class="slider" id="myRange">
+      </div>
+      <div style="display: flex; margin-bottom: 4px;" class="horario" id="azul" *ngFor="let item of carros">
+        <button class="eye-button" (click)="toggleVisible (item)">
+          <i *ngIf="item.visible === true" class="fas fa-eye" style="color: white;"></i>
+          <i *ngIf="item.visible === false" class="fas fa-eye-slash" style="color: white;"></i>
+        </button>
+        <!-- <nb-checkbox class="checkbox-ruta" (checkedChange)="toggleVisible (item)" [(ngModel)]="item.visible" status="warning"></nb-checkbox> -->
+        <!-- <input style="margin: 16px;" type="checkbox" [(ngModel)]="item.visible_rutas" (change)="changeStatus (item)"> -->
+        <img src="assets/img/Grupo45.png">
+        <p>{{ item.alias }}</p>
+      </div>
+    </div>
+
+    <div style="width: 100%; overflow-y: hidden;overflow-x: auto;height: auto;white-space: nowrap;">
+      <div class="horario">
+        <div *ngFor="let item of horas" [ngStyle]="{'min-width':get_min_width ()}" class="liost_iguales">
+          <span>{{ item }}</span>
+          <span class="ml-2 mr-3">...</span>
+        </div>
+      </div>
+      <div *ngFor="let carro of carros"  class="horario" style="margin-bottom: 4px; width: auto;">
+        <div class="pista" [ngStyle]="{'min-width':get_min_width_pista ()}">
+          <div *ngFor="let pedido of carro.pedidos">
+            <div *ngIf="pedido.hora_inicio_carga !== null" [id]="'inicio_carga_' + pedido.id">
+              <img [tooltip]="'Inicio de carga: ' + timestamp_to_date (pedido.hora_inicio_carga)" placement="top"  style="position: relative;" src="assets/img/inicio_evento.svg">
+            </div>
+
+            <div *ngIf="pedido.hora_fin_carga !== null" [id]="'fin_carga_' + pedido.id">
+              <img [tooltip]="'Fin de carga: ' + timestamp_to_date (pedido.hora_fin_carga)" placement="top"  style="position: relative; left: -3px;" src="assets/img/fin_evento.svg">
+            </div>
+
+
+            <div *ngIf="pedido.hora_inicio_ruta !== null" [id]="'hora_inicio_ruta_' + pedido.id">
+              <img [tooltip]="'Inicio de ruta: ' + timestamp_to_date (pedido.hora_inicio_ruta)" placement="top"  style="margin-top: 16px;" src="assets/img/inicio_ruta.svg">
+            </div>
+
+
+            <div *ngIf="pedido.hora_llegada_almacen !== null" [id]="'hora_llegada_almacen_' + pedido.id">
+              <img [tooltip]="'LLegada a almacen: ' + timestamp_to_date (pedido.hora_llegada_almacen)" placement="top"  style="margin-top: 7px; position: absolute; left: -12px;" src="assets/img/icono almacen.png">
+            </div>
+
+            <div *ngIf="pedido.hora_fin_ruta !== null" [id]="'hora_fin_ruta_' + pedido.id">
+              <img [tooltip]="'Fin de ruta: ' + timestamp_to_date (pedido.hora_fin_ruta)" placement="top"  style="margin-top: 12px; position: absolute; left: -6px;" src="assets/img/fin_ruta.svg">
+            </div>
+
+
+            <div style="position: absolute;" *ngFor="let evento of pedido.eventos">
+              <ng-container *ngIf="evento.tipo !== 'recarga_combustible'">
+                <div *ngIf="evento.hora_inicio !== null" [id]="'evento_inicio_' + evento.id">
+                  <img [tooltip]="evento.nombre + get_motivo (evento) + ', hora de inicio: ' + evento.hora_inicio" placement="top" src="assets/img/inicio_evento.svg">
+                </div>
+
+                <div *ngIf="evento.hora_fin !== null" [id]="'evento_fin_' + evento.id">
+                  <img [tooltip]="evento.nombre + ', hora de fin: ' + evento.hora_fin" placement="top" src="assets/img/fin_evento.svg">
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="evento.tipo === 'recarga_combustible'">
+                <div [id]="'evento_' + evento.id">
+                  <img style="height: 24px; margin-top: 10px;" [tooltip]="evento.nombre + ', hora de inicio: ' + evento.hora_inicio" placement="top" src="assets/img/grifo.png">
+                </div>
+              </ng-container>
+            </div>
+
+            <div style="position: absolute;" *ngFor="let cliente of pedido.informacion_clientes">
+              <ng-template #cliente_info>
+                <p style="color: #ffffff; text-align: left;"><strong>Cliente: </strong>{{ cliente.cliente_nombre }}</p>
+                <p style="color: #ffffff; text-align: left;"><strong>Direccion: </strong>{{ cliente.cliente_direccion }}</p>
+                <p style="color: #ffffff; text-align: left;"><strong>Llegada: </strong>{{ timestamp_to_date (cliente.hora_llegada) }}</p>
+              </ng-template>
+
+
+              <div *ngIf="cliente.hora_llegada !== null" [id]="'hora_llegada_' + pedido.id + '_' + cliente.id">
+                <img [tooltip]="cliente_info" content-type="template" style="margin-top: 16px; position: relative; left: -7px;" src="assets/img/llegada_cliente.svg">
+              </div>
+
+
+              <div *ngIf="cliente.hora_rechazo_total !== null && cliente.estado === 'pendiente_rechazo_total'" [id]="'hora_rechazo_total_'  + pedido.id + '_' + cliente.id">
+                <img [tooltip]="'Rechazo total: ' + timestamp_to_date (cliente.hora_rechazo_total)" style="position: relative; margin-top: 5px; left: -20px;" src="assets/img/alerta.png" (click)="click_alert (dialog, pedido, cliente)">
+              </div>
+
+
+              <div *ngIf="cliente.hora_ausencia !== null && cliente.estado === 'ausente'" [id]="'hora_ausencia_' + pedido.id + '_' + cliente.id">
+                <img [tooltip]="'Ausencia: ' + timestamp_to_date (cliente.hora_ausencia)" style="position: relative; margin-top: 5px; left: -20px;" src="assets/img/alerta.png" (click)="click_alert (dialog, pedido, cliente)">
+              </div>
+
+
+
+              <div *ngIf="cliente.hora_inicio_descarga !== null" [id]="'hora_inicio_descarga_' + pedido.id + '_' + cliente.id">
+                <img [tooltip]="'Inicio de descarga: ' + timestamp_to_date (cliente.hora_inicio_descarga)" style="margin-top: 12px; position: relative; left: -6px; opacity: 0.5;" src="assets/img/descarga.svg">
+              </div>
+
+              <div *ngIf="cliente.hora_fin_descarga !== null" [id]="'hora_fin_descarga_' + pedido.id + '_' + cliente.id">
+                <ng-template style="min-width: 350px;" #detalle_pedido>
+                  <ng-container *ngIf="cliente.tipo_descarga === 'completo'">
+                    <p style="color: #ffffff; text-align: left;"><strong>Fin de descarga: </strong>{{ timestamp_to_date (cliente.hora_fin_descarga) }}</p>
+                    <p style="color: #ffffff; text-align: left;"><strong>Tipo de descarga: </strong><span *ngIf="cliente.tipo_descarga === 'completo'">Completo</span><span *ngIf="cliente.tipo_descarga === 'parcial'">Parcial</span><span *ngIf="cliente.tipo_descarga === 'rechazado'">Rechazo</span></p>
+                  </ng-container>
+                  <ng-container *ngIf="cliente.tipo_descarga !== 'completo'">
+                    <p style="color: #ffffff; text-align: left;"><strong>Fin de descarga: </strong>{{ timestamp_to_date (cliente.hora_fin_descarga) }}</p>
+                    <p style="color: #ffffff; text-align: left;"><strong>Tipo de descarga: </strong><span *ngIf="cliente.tipo_descarga === 'completo'">Completo</span><span *ngIf="cliente.tipo_descarga === 'parcial'">Parcial</span><span *ngIf="cliente.tipo_descarga === 'rechazado'">Rechazo</span></p>
+                    <p style="color: #ffffff; text-align: left;">Detalle pedido:</p>
+                    <p *ngFor="let producto of cliente.productos" style="color: #ffffff; text-align: left;">
+                      <ng-container *ngIf="producto.estado !== 'entrega_completa'">
+                        - ({{ producto.cantidad }} {{ producto?.um }}) {{ producto.nombre }} <span *ngIf="producto.estado === 'rechazado_total'">(Rechazado)</span><span *ngIf="producto.estado === 'rechazado_parcial'">(Rechazo parcial: {{ producto.rechazo_cantidad }} {{ producto?.um }})</span>
+                      </ng-container>
+                    </p>
+                  </ng-container>
+                </ng-template>
+                <img [tooltip]="detalle_pedido" content-type="template" (click)="ver_detalle_pedido (dialog_detalle_pedido, cliente)" style="margin-top: 16px; position: relative; left: -6px;" [src]="get_icon (cliente.tipo_descarga)">
+              </div>
+
+              {{ show_eventos_alerta (dialog, pedido, cliente) }}
+            </div>
+          </div>
+
+          {{ draw (carro) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
